@@ -347,21 +347,109 @@
               <!-- Catégories -->
               <div class="form-group">
                 <label class="form-label">Catégories</label>
-                <div class="checkbox-group">
-                  <label class="checkbox-item">
-                    <input type="checkbox" name="categories" value="1" class="rounded border-gray-300 text-blue-600">
-                    <span>Voyage</span>
-                  </label>
-                  <label class="checkbox-item">
-                    <input type="checkbox" name="categories" value="2" class="rounded border-gray-300 text-blue-600">
-                    <span>Technologie</span>
-                  </label>
-                  <label class="checkbox-item">
-                    <input type="checkbox" name="categories" value="3" class="rounded border-gray-300 text-blue-600">
-                    <span>Cuisine</span>
-                  </label>
+                <div class="relative">
+                  <div class="dropdown-select" id="categoriesDropdown">
+                    <div class="selected-options flex items-center justify-between w-full px-4 py-2 border border-gray-300 rounded-md bg-white shadow-sm cursor-pointer">
+                      <span class="selected-text text-gray-700">Sélectionner des catégories</span>
+                      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </div>
+                    <div class="dropdown-options absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg hidden">
+                      <div class="p-2 border-b border-gray-200">
+                        <input type="text" placeholder="Rechercher..." class="w-full px-3 py-1 text-sm border rounded">
+                      </div>
+                      <div class="max-h-60 overflow-y-auto">
+                        <label class="flex items-center p-3 hover:bg-gray-100 cursor-pointer">
+                          <input type="checkbox" name="categories" value="1" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                          <span class="ml-2 text-gray-700">Voyage</span>
+                        </label>
+                        <label class="flex items-center p-3 hover:bg-gray-100 cursor-pointer">
+                          <input type="checkbox" name="categories" value="2" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                          <span class="ml-2 text-gray-700">Technologie</span>
+                        </label>
+                        <label class="flex items-center p-3 hover:bg-gray-100 cursor-pointer">
+                          <input type="checkbox" name="categories" value="3" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                          <span class="ml-2 text-gray-700">Santé</span>
+                        </label>
+                        <label class="flex items-center p-3 hover:bg-gray-100 cursor-pointer">
+                          <input type="checkbox" name="categories" value="4" class="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                          <span class="ml-2 text-gray-700">Éducation</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <style>
+                .dropdown-select {
+                  position: relative;
+                  font-family: inherit;
+                  width: 100%;
+                }
+                .dropdown-options {
+                  display: none;
+                }
+                .dropdown-options.show {
+                  display: block;
+                }
+                .selected-options {
+                  min-height: 38px;
+                }
+                .dropdown-options label {
+                  display: flex;
+                  align-items: center;
+                  transition: background-color 0.2s;
+                }
+                .dropdown-options input[type="checkbox"] {
+                  margin-right: 8px;
+                }
+              </style>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  const dropdown = document.querySelector('.dropdown-select');
+                  const dropdownButton = dropdown.querySelector('.selected-options');
+                  const dropdownOptions = dropdown.querySelector('.dropdown-options');
+                  const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+                  const selectedText = dropdown.querySelector('.selected-text');
+                  
+                  // Toggle dropdown
+                  dropdownButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownOptions.classList.toggle('show');
+                  });
+
+                  // Close dropdown when clicking outside
+                  document.addEventListener('click', function(e) {
+                    if (!dropdown.contains(e.target)) {
+                      dropdownOptions.classList.remove('show');
+                    }
+                  });
+
+                  // Update selected text
+                  function updateSelectedText() {
+                    const selected = [];
+                    checkboxes.forEach(checkbox => {
+                      if (checkbox.checked) {
+                        selected.push(checkbox.nextElementSibling.textContent.trim());
+                      }
+                    });
+                    
+                    if (selected.length > 0) {
+                      selectedText.textContent = selected.join(', ');
+                      selectedText.classList.add('text-gray-900');
+                    } else {
+                      selectedText.textContent = 'Sélectionner des catégories';
+                      selectedText.classList.remove('text-gray-900');
+                    }
+                  }
+
+                  // Add change event to checkboxes
+                  checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', updateSelectedText);
+                  });
+                });
+              </script>
 
               <!-- Statut -->
               <div class="form-group">
